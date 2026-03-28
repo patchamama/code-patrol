@@ -292,8 +292,8 @@ def check_js_eslint(path: Path) -> list[Issue]:
                           f"ESLint config error: {result.stderr[:200].strip()}", 'eslint')]
         return []
     try:
+        issues: list[Issue] = []
         for fr in json.loads(result.stdout):
-            issues: list[Issue] = []
             for msg in fr.get('messages', []):
                 sev  = ERROR if msg.get('severity') == 2 else WARN
                 rule = msg.get('ruleId') or 'eslint'
