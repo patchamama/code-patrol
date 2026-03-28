@@ -1,0 +1,7 @@
+# code-patrol — Python dependencies
+# Install with: pip install -r requirements.txt
+#
+# Only pyflakes is strictly required for enhanced Python checks.
+# Node.js / npm must be installed separately for JS/CSS/HTML lint tools.
+
+pyflakes>=3.0.0

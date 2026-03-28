@@ -1,0 +1,16 @@
+{
+  "name": "code-patrol",
+  "version": "0.1.0",
+  "description": "Language-agnostic static validator for web projects (Python, JS, CSS, HTML)",
+  "private": true,
+  "scripts": {
+    "validate": "python validate.py"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.0",
+    "globals": "^17.0.0",
+    "html-validate": "^10.0.0",
+    "stylelint": "^16.0.0",
+    "stylelint-config-standard": "^40.0.0"
+  }
+}
