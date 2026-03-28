@@ -49,6 +49,11 @@ Most projects start without a formal test suite. Structural errors accumulate si
 
 ```bash
 # Clone or copy validate.py + env.example.py into your project's tools/ folder
+
+# Create and activate virtual environment
+python3 -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+
 # Install Python dependencies
 pip install -r requirements.txt
 
@@ -60,7 +65,7 @@ cp env.example.py env.py          # edit paths to match your project
 cp eslint.config.example.mjs eslint.config.mjs   # customise ESLint globals
 
 # Run
-python tools/validate.py
+python3 tools/validate.py
 ```
 
 ---
@@ -99,32 +104,32 @@ See `env.example.py` for all available options with comments.
 
 ```bash
 # All checks (default)
-python tools/validate.py
+python3 tools/validate.py
 
 # Specific language
-python tools/validate.py --python
-python tools/validate.py --js
-python tools/validate.py --css
-python tools/validate.py --html
+python3 tools/validate.py --python
+python3 tools/validate.py --js
+python3 tools/validate.py --css
+python3 tools/validate.py --html
 
 # Single file
-python tools/validate.py src/app.py
+python3 tools/validate.py src/app.py
 
 # Python dry-run execution (catches runtime import errors)
-python tools/validate.py --exec
+python3 tools/validate.py --exec
 
 # Skip npm-based linters (ESLint / html-validate / stylelint)
-python tools/validate.py --no-lint
+python3 tools/validate.py --no-lint
 
 # Save HTML report
-python tools/validate.py --report
-python tools/validate.py --report-out build/report.html
+python3 tools/validate.py --report
+python3 tools/validate.py --report-out build/report.html
 
 # Machine-readable JSON (pipe to other tools or AI)
-python tools/validate.py --json
+python3 tools/validate.py --json
 
 # Verbose (show INFO-level items too)
-python tools/validate.py -v
+python3 tools/validate.py -v
 ```
 
 **Exit codes:** `0` = no errors, `1` = one or more errors found.
@@ -139,11 +144,11 @@ One of the most productive workflows is to feed the validation report directly t
 
 ```bash
 # Generate a JSON report, then ask Claude to fix everything
-python tools/validate.py --json > /tmp/report.json
+python3 tools/validate.py --json > /tmp/report.json
 claude "Read /tmp/report.json. For each error listed, find the affected file in the project and apply the exact fix. Don't fix warnings unless they indicate real problems."
 
 # Or pipe directly for a quick interactive session
-python tools/validate.py 2>&1 | claude --print \
+python3 tools/validate.py 2>&1 | claude --print \
   "These are validation errors from my project. For each error, show the file path, the problem, and the exact line change needed to fix it."
 ```
 
@@ -152,12 +157,12 @@ python tools/validate.py 2>&1 | claude --print \
 Use slash-command style prompts for targeted fixes:
 
 ```
-Run python tools/validate.py --json and fix all errors found.
+Run python3 tools/validate.py --json and fix all errors found.
 For each fix, explain what was wrong in one sentence.
 ```
 
 ```
-Run python tools/validate.py --python --exec and investigate any
+Run python3 tools/validate.py --python --exec and investigate any
 module load errors. Trace the import chain to find the root cause.
 ```
 
@@ -165,10 +170,10 @@ module load errors. Trace the import chain to find the root cause.
 
 ```bash
 # Any AI CLI that reads stdin
-python tools/validate.py --json | ai-cli "Fix the errors in this validation report"
+python3 tools/validate.py --json | ai-cli "Fix the errors in this validation report"
 
 # GPT-4 via shell
-REPORT=$(python tools/validate.py --json)
+REPORT=$(python3 tools/validate.py --json)
 openai api chat.completions.create \
   -m gpt-4o \
   -g user "Fix these validation errors: $REPORT"
@@ -295,7 +300,7 @@ jobs:
         with: { node-version: '20' }
       - run: pip install -r tools/requirements.txt
       - run: npm ci
-      - run: python tools/validate.py --json > report.json
+      - run: python3 tools/validate.py --json > report.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
