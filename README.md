@@ -47,12 +47,48 @@ Most projects start without a formal test suite. Structural errors accumulate si
 
 ## Quick Start
 
+### 1. Install prerequisites
+
+**Python 3**
+
+```bash
+# macOS (Homebrew)
+brew install python3
+
+# Linux (Debian / Ubuntu)
+sudo apt update && sudo apt install -y python3 python3-venv python3-pip
+
+# Windows (winget)
+winget install Python.Python.3
+# or download the installer from https://www.python.org/downloads/
+```
+
+**Node.js**
+
+```bash
+# macOS (Homebrew)
+brew install node
+
+# Linux (Debian / Ubuntu)
+sudo apt update && sudo apt install -y nodejs npm
+
+# Windows (winget)
+winget install OpenJS.NodeJS
+# or download the installer from https://nodejs.org
+```
+
+### 2. Set up the project
+
 ```bash
 # Clone or copy validate.py + env.example.py into your project's tools/ folder
 
-# Create and activate virtual environment
+# Create virtual environment
 python3 -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+
+# Activate it
+source venv/bin/activate          # macOS / Linux
+# venv\Scripts\activate           # Windows (cmd)
+# venv\Scripts\Activate.ps1       # Windows (PowerShell)
 
 # Install Python dependencies
 pip install -r requirements.txt
@@ -398,8 +434,9 @@ jobs:
 
 | Tool | Purpose | Install |
 |------|---------|---------|
-| `pyflakes` | Python import/name analysis | `pip install pyflakes` |
-| `node` | JS syntax check (`node --check`) | https://nodejs.org |
+| `python3` | Runtime | macOS: `brew install python3` · Linux: `sudo apt install python3 python3-venv` · Windows: `winget install Python.Python.3` |
+| `pyflakes` | Python import/name analysis | `pip install pyflakes` (included in `requirements.txt`) |
+| `node` | JS syntax check (`node --check`) | macOS: `brew install node` · Linux: `sudo apt install nodejs npm` · Windows: `winget install OpenJS.NodeJS` |
 | `eslint` | JS linting | `npm i -D eslint @eslint/js globals` |
 | `html-validate` | HTML structure validation | `npm i -D html-validate` |
 | `stylelint` | CSS linting | `npm i -D stylelint stylelint-config-standard` |
