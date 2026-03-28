@@ -1,15 +1,38 @@
-# code-patrol
+<p align="center">
+  <h1 align="center">code-patrol</h1>
+  <p align="center">Language-agnostic static validator for web projects.<br>Python · JavaScript · CSS · HTML — one command, one report.</p>
+</p>
 
-> **Language-agnostic static validator for web projects.**
-> Python · JavaScript · CSS · HTML — one command, one report.
+<p align="center">
+  <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg">
+  <img alt="Python" src="https://img.shields.io/badge/python-3.8%2B-blue.svg">
+  <img alt="Node" src="https://img.shields.io/badge/node-16%2B-339933.svg">
+  <img alt="Platform" src="https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey.svg">
+</p>
 
 ---
 
-## Why code-patrol?
-
 Most projects start without a formal test suite. Structural errors accumulate silently: an import that stopped working after a rename, a CSS property that was deprecated, a broken `<script src="…">` that only fails at runtime. `code-patrol` catches all of these **without executing business logic** — no side effects, no database connections, no running servers.
 
-### Where it helps most
+---
+
+## Table of Contents
+
+- [Where it helps most](#where-it-helps-most)
+- [What it detects](#what-it-detects)
+- [Quick Start](#quick-start)
+- [Configuration](#configuration-envpy)
+- [Usage](#usage)
+- [Using AI to Fix Errors](#using-ai-to-fix-errors)
+- [Common Errors Detected](#common-errors-detected)
+- [Project Structure](#project-structure)
+- [Integrating with CI/CD](#integrating-with-cicd)
+- [Roadmap](#roadmap)
+- [Dependencies](#dependencies)
+
+---
+
+## Where it helps most
 
 | Scenario | What it does for you |
 |----------|----------------------|
@@ -19,7 +42,13 @@ Most projects start without a formal test suite. Structural errors accumulate si
 | **Before writing tests** | Cleans up obvious errors first, so test-writing starts from solid ground |
 | **Continuous integration** | Runs in seconds, integrates with any CI pipeline |
 
-### What it detects (without running the application)
+---
+
+## What it detects
+
+<table>
+<tr>
+<td valign="top" width="50%">
 
 **Python**
 - `SyntaxError` and `SyntaxWarning` (invalid escape sequences, deprecated syntax)
@@ -33,6 +62,9 @@ Most projects start without a formal test suite. Structural errors accumulate si
 - Calling functions that don't exist in the page context
 - Rule violations configured per-project (ESLint)
 
+</td>
+<td valign="top" width="50%">
+
 **CSS**
 - Deprecated property values (e.g. `word-break: break-word`)
 - Invalid hex colors, unknown properties, duplicate selectors
@@ -43,13 +75,18 @@ Most projects start without a formal test suite. Structural errors accumulate si
 - Missing required attributes, invalid attribute values
 - Structural violations (heading hierarchy, element nesting)
 
+</td>
+</tr>
+</table>
+
 ---
 
 ## Quick Start
 
-### 1. Install prerequisites
+### Step 1 — Install prerequisites
 
-**Python 3**
+<details>
+<summary><strong>Python 3</strong></summary>
 
 ```bash
 # macOS (Homebrew)
@@ -60,10 +97,13 @@ sudo apt update && sudo apt install -y python3 python3-venv python3-pip
 
 # Windows (winget)
 winget install Python.Python.3
-# or download the installer from https://www.python.org/downloads/
+# or download from https://www.python.org/downloads/
 ```
 
-**Node.js**
+</details>
+
+<details>
+<summary><strong>Node.js</strong></summary>
 
 ```bash
 # macOS (Homebrew)
@@ -74,10 +114,12 @@ sudo apt update && sudo apt install -y nodejs npm
 
 # Windows (winget)
 winget install OpenJS.NodeJS
-# or download the installer from https://nodejs.org
+# or download from https://nodejs.org
 ```
 
-### 2. Set up the project
+</details>
+
+### Step 2 — Set up the project
 
 ```bash
 # Clone or copy validate.py + env.example.py into your project's tools/ folder
@@ -97,8 +139,8 @@ pip install -r requirements.txt
 npm install --save-dev @eslint/js globals html-validate stylelint stylelint-config-standard
 
 # Configure for your project
-cp env.example.py env.py          # edit paths to match your project
-cp eslint.config.example.mjs eslint.config.mjs   # customise ESLint globals
+cp env.example.py env.py                         # edit paths to match your project
+cp eslint.config.example.mjs eslint.config.mjs  # customise ESLint globals
 
 # Run
 python3 tools/validate.py
@@ -168,7 +210,7 @@ python3 tools/validate.py --json
 python3 tools/validate.py -v
 ```
 
-**Exit codes:** `0` = no errors, `1` = one or more errors found.
+**Exit codes:** `0` = no errors · `1` = one or more errors found.
 
 ---
 
@@ -189,8 +231,6 @@ python3 tools/validate.py 2>&1 | claude --print \
 ```
 
 ### Inside a Claude Code session
-
-Use slash-command style prompts for targeted fixes:
 
 ```
 Run python3 tools/validate.py --json and fix all errors found.
@@ -226,9 +266,10 @@ openai api chat.completions.create \
 
 ## Common Errors Detected
 
-### Python
+<details>
+<summary><strong>Python</strong></summary>
 
-```
+```python
 # SyntaxWarning: invalid escape sequence
 path = "C:\new_folder"         # \n is escape sequence, not literal backslash
 # Fix:
@@ -249,7 +290,10 @@ def process(data):
 from urllib.parse import quote   # imported but never called
 ```
 
-### JavaScript
+</details>
+
+<details>
+<summary><strong>JavaScript</strong></summary>
 
 ```js
 // no-undef: calling a function defined in another script file
@@ -265,7 +309,10 @@ function openModal(id) {
 <script src="assets/catalog.js"></script>  <!-- file moved to js/catalog.js -->
 ```
 
-### CSS
+</details>
+
+<details>
+<summary><strong>CSS</strong></summary>
 
 ```css
 /* Deprecated value */
@@ -282,7 +329,10 @@ function openModal(id) {
 color: #gghhii;   /* invalid hex characters */
 ```
 
-### HTML
+</details>
+
+<details>
+<summary><strong>HTML</strong></summary>
 
 ```html
 <!-- Broken local reference -->
@@ -298,22 +348,24 @@ color: #gghhii;   /* invalid hex characters */
 <iframe src="video.html">     <!-- missing title — screen reader issue -->
 ```
 
+</details>
+
 ---
 
 ## Project Structure
 
 ```
 tools/
-├── validate.py              # the validator (language-agnostic, reads env.py)
-├── env.py                   # your project config (not in this repo)
-├── env.example.py           # template — copy to env.py
-├── eslint.config.mjs        # ESLint rules (customise per project)
+├── validate.py               # the validator (language-agnostic, reads env.py)
+├── env.py                    # your project config (not in this repo)
+├── env.example.py            # template — copy to env.py
+├── eslint.config.mjs         # ESLint rules (customise per project)
 ├── eslint.config.example.mjs
-├── .htmlvalidate.json       # html-validate rules
+├── .htmlvalidate.json        # html-validate rules
 ├── .htmlvalidate.example.json
-├── .stylelintrc.json        # stylelint rules
+├── .stylelintrc.json         # stylelint rules
 ├── .stylelintrc.example.json
-├── requirements.txt         # pip install -r requirements.txt
+├── requirements.txt          # pip install -r requirements.txt
 └── README.md
 ```
 
@@ -346,9 +398,10 @@ jobs:
 
 ---
 
-## TODO / Roadmap
+## Roadmap
 
-### Near-term
+<details>
+<summary><strong>Near-term</strong></summary>
 
 - [ ] **TypeScript support** — `tsc --noEmit` for type checking without compilation
 - [ ] **JSON validation** — schema validation via `jsonschema`, detect duplicate keys, invalid syntax
@@ -358,7 +411,10 @@ jobs:
 - [ ] **Circular import detection** — Python circular dependencies
 - [ ] **Dependency vulnerability scan** — `pip-audit` for Python, `npm audit` for Node
 
-### Intermediate
+</details>
+
+<details>
+<summary><strong>Intermediate</strong></summary>
 
 - [ ] **SQL simulation** — Parse SQL files and validate syntax for MySQL, PostgreSQL, SQLite:
   - `sqlfluff` for dialect-aware linting
@@ -370,7 +426,10 @@ jobs:
 - [ ] **Git hook integration** — auto-run on `pre-commit`
 - [ ] **VSCode extension** — inline underline of issues in the editor
 
-### Advanced
+</details>
+
+<details>
+<summary><strong>Advanced</strong></summary>
 
 - [ ] **Playwright browser testing** — open the frontend in a real browser and:
   - Click through all interactive elements (buttons, tabs, modals, forms)
@@ -428,6 +487,8 @@ jobs:
   EXTRA_CHECKS = {'*.py': [custom_check]}
   ```
 
+</details>
+
 ---
 
 ## Dependencies
@@ -441,10 +502,10 @@ jobs:
 | `html-validate` | HTML structure validation | `npm i -D html-validate` |
 | `stylelint` | CSS linting | `npm i -D stylelint stylelint-config-standard` |
 
-All npm tools are optional. `validate.py` skips any tool whose config file doesn't exist or whose binary isn't found.
+All npm tools are optional — `validate.py` skips any tool whose config file doesn't exist or whose binary isn't found.
 
 ---
 
 ## License
 
-MIT
+[MIT](LICENSE)
